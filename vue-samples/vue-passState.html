@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>父子传参</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        span{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- <my-component :init-count="100"></my-component> -->
+        <my-component :width="100"></my-component>
+    </div>
+    <script>
+        /** 
+        *  业务中经常遇到两种需要改变prop的情况，一种是父组件传递初始值进来，字组件将它作为初始值保存起来
+        *  在自己的作用域下就可由随意使用和更改，这种情况可以再组件data内再声明一个数据，用来引用父组件的prop
+        */
+        // Vue.component('my-component',{
+        //     props:['initCount'],
+        //     template:   
+        //     `   <div>
+        //             <div>{{count}}</div>
+        //             <button @click="addCount()">+</button>
+        //             <button @click="minusCount()">-</button>    
+        //         </div>
+        //     `,
+        //     data:function(){
+        //         return{
+        //             count: this.initCount
+        //         }
+        //     },
+        //     methods:{
+        //         addCount:function(){
+        //             return this.count++
+        //         },
+        //         minusCount:function(){
+        //             return this.count--
+        //         }
+        //     }
+        // })
+
+        /**
+         * 另一种情况是prop作为需要被转变的原始值传入，这种情况用计算属性。
+          */
+        
+        Vue.component('my-component',{
+            props:['width'],
+            template:'<div :style="style">组件内容</div>',
+            computed:{
+                style:function(){
+                    return{
+                        width: this.width + 'px'
+                    }
+                }
+            }
+        })
+        var vm = new Vue({
+            el:'#app',
+            data:{
+                writeCount:''
+            }
+        })
+    </script>
+</body>
+</html>
