@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非父子组件通信2.x</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        <component-a></component-a>
+    </div>
+    <script>
+        /** 
+         * 在vue 2.x中，推荐使用一个空的Vue实例作为中央事件总线(bus),也就是一个中介。
+         * 举个例子，你需要租房子，可能会找房产中介来登记你的需求，然后中介将你的信息发送给满足要求的出租者，出租者再把报价
+         * 和看房时间告诉中介，有中介再转打给你，整个过程中，买家和卖家并没有任何交流，都是通过中间人来传话的。
+         * 或者你最近需要换房子，你需要找房产中介登记你的信息，订阅与你找房需求相关的资讯，一旦有符合你的房子出现时，中介会通知你，
+         * 并传达你房子的具体信息。
+         * 这两个例子中，你和出租者担任的就是两个跨级的组件，而房产中介就是这个中央事件总线（bus）
+         */
+        let bus = new Vue();
+
+        Vue.component('component-a',{
+            template:'<button @click="handleEvent">传递事件</button>',
+            methods: {
+                handleEvent() {
+                    bus.$emit('on-message','来自component-a的内容!');
+                }
+            },
+        })
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: ''
+                }
+            },
+            mounted () {
+                let _this = this;
+                // 在实例初始化时，监听来自bus的事件
+                bus.$on('on-message',function(msg){
+                    _this.message = msg;
+                })
+            },
+            methods: {
+                name() {
+                    
+                }
+            },
+        })
+        /** 
+         * 首先穿建了一个名为bus的空的vue实例，里面没有任何内容；
+         * 然后全局定义了组件component-a;最后创建了Vue实例app,在app初始化时，也就是生命周期mounted够子函数里监听了来自
+         * bus 的事件，on-message,而在组件component-a中，点击按钮会通过bus把事件on-message发出去，此时app就会接收来自bus的事件，
+         * 进而在回调中完成自己的业务逻辑。
+         * 这种方法巧妙而轻量的实现了任何组件间的通信，包括父子、兄弟、跨级，而且vue1.x和vue2.x都适用。
+         * 如果深入使用，可以扩展bus实例，给他添加data、methods、computed等选项，这些均可以公用，在业务中，尤其是协同开发时非常有用。
+         * 除了中央事件事件总线外，还有两种方式可以实现组件建通信:父链和子组件索引
+         */
+    </script>
+</body>
+</html>
