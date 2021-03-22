@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非父子组件通信</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@1.0.10/dist/vue.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{message}}</p>
+        <my-component></my-component>
+    </div>
+    <script>
+        /** 
+         * 在实际业务中，除了父子组件通信外，还有很多的非父子组件通信的场景，非父子组件一般有两种，
+         * 兄弟组件和跨多级组件。为了更加测底的了解vue2.x中的通信方法，我们先来看下vue1.x中是如何实现的，这样便于我们了解
+         * vue的设计思想。
+         * 在vue1.x中，除了$emit()方法外，还提供了$dispatch和$broadcast()这两个方法。$dispatch()用于向上级派发事件，只要是他的父级
+         * 都可以在vue的实例的events选向内接收。
+         * 下面实例使用vue.js 1.x的版本
+         */
+        Vue.component('my-component',{
+            template:'<button @click="handleDispatch">派发事件</button>',
+            methods: {
+                handleDispatch() {
+                    this.$dispatch('on-message','来自内部组件的数据');
+                    console.log('派发');
+                }
+            },
+        })
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: ''
+                }
+            },
+            events: {
+                'on-message': function(msg) {
+                    this.message = msg;
+                    alert(1)
+                }
+            },
+        })
+    </script>
+</body>
+</html>
