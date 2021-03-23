@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表组件</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 作用于插槽更具代表性的用例是列表组件，允许组件自定义应该如何渲染列表每一项 -->
+        <my-list :books="books">
+            <!-- 作用于插槽也是可以具名的slot -->
+            <template slot="book" scope="props">
+                <li>{{props.bookName}}</li>
+            </template>
+        </my-list>
+    </div>
+    <script>
+        Vue.component('my-list',{
+            props:{
+                books:{
+                    type:Array,
+                    default: function(){
+                        return [];
+                    }
+                }
+            },
+            template:
+            `
+                <ul>
+                    <slot name="book" 
+                          v-for="book in books"
+                          :book-name="book.names"  ></slot>    
+                </ul>
+            `,
+        })
+        let vm = new Vue({
+            el: '#app', 
+            data:{
+                books:[
+                    {name:'《Vue.js实战》'},
+                    {name:'《JavaScript语言精粹》'},
+                    {name:'《Javascript高级程序设计》'},
+                ]
+            },
+        })
+        /** 
+         * 此例主要用于介绍作用域插槽的用法，并没有加入使用场景，而作用域插槽的适用场景就是
+         * 即可以复用子组件的slot，又可以使slot内容不一致。
+         */
+    </script>
+</body>
+</html>
