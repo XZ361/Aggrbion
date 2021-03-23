@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异步组件</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <child-component></child-component>
+    </div>
+    <script>
+        /** 
+         * 当你的工程足够大，使用的组件足够多时，这时候需要考虑性能问题，
+         * 以为一开始把所有的组件都加载是没必要的一笔开销。
+         * 好在Vue允许将组件定义为一个工厂函数，动态的解析组件。
+         * Vue只在组件需要渲染时触发工厂函数，并且将结果缓存起来，用于后面的再次渲染。
+         */
+        Vue.component('child-component',function(resolve,reject){
+            window.setTimeout(function(){
+                resolve({
+                    template:'<div>我是异步渲染的</div>'
+                })
+            },2000);
+        });
+        let vm = new Vue({
+            el: '#app',
+
+        })
+        /** 
+         * 工厂函数接受一个resolve回调，在收到服务器下载的组件定义时调用。也可以调用reject指示加载失败。
+         * 这里的定时器只是为了演示异步，具体的下载逻辑可以自己决定，
+         * 比如将组建配置携程一个对象配置，通过ajax来请球，然后调用resolve传入配置选项
+         */
+    </script>
+</body>
+</html>
