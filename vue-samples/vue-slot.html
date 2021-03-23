@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>slot分发内容</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- props传递数据、events触发事件、slot内容分发构成了vue组件的3个API来源，在复杂的组件也是由这三部分组成 -->
+    <div id="app">
+        <child-component v-show="showChild"></child-component>
+    </div>
+    <script>
+        Vue.component('child-component',{
+            template:'<div>子组件</div>'
+        })
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    showChild: true
+                }
+            },
+            methods: {
+                name() {
+                    
+                }
+            },
+        })
+    </script>
+</body>
+</html>

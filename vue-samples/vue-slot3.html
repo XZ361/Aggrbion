@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>具名slot</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <child-component>
+            <h2 slot="header">标题</h2>
+            <p>征文内容</p>
+            <p>更多的征文内容</p>
+            <div slot="footer">底部信息</div>
+        </child-component>
+    </div>
+    <script>
+        /** 
+         * 给slot元素指定一个name后，可以分发多个内容，
+         * 具名slot和单个slot可以共存
+         */
+        Vue.component('child-component',{
+            template:
+            `   <div class= "container">
+                    <div class="header">
+                        <slot name="header"></slot>    
+                    </div>
+                    <div class="main">
+                        <slot></slot>    
+                    </div>
+                    <div class="footer">
+                        <slot name="footer"></slot>    
+                    </div>
+                </div>
+
+            `,
+        })
+        let vm = new Vue({
+            el: '#app',
+        })
+        /** 
+         * 子组件内声明了3个slot元素，其中main内的slot没有name属性，
+         * 他将作为默认slot出现，父组件没有使用的slot特性的元素与内容都出现在这里
+         * 如果没有指定默认的匿名slot，父组件内多余的内容都将被抛弃
+         */
+    </script>
+</body>
+</html>
