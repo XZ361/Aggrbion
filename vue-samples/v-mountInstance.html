@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手动挂载实例</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="mount-div">
+
+    </div>
+    <script>
+        /** 
+         * 我们现在所创建的实例都是通过new Vue()的形式搞出来的。
+         * 在一些很特殊的情况下，我们需要动态的去创建Vue实例，Vue提供了Vue.extend和$mount两个方法来手动挂载一个实例
+         * Vue.extend是基础的Vue 构造器，创建一个子类，参数是一个包涵组件选项的对象。
+         * 如果Vue实例在实例化时，没有收到el选项，他就处于未挂载的状态，没有关联的dom元素。
+         * 可以使用$mount()手动的挂载一个未挂载的实例。这个方法返回实例自身，因此可以链式调用其他实例方法。
+         */
+        var MyComponent = Vue.extend({
+            template: '<div>Hello: {{name}}</div>',
+            data() {
+                return {
+                    name: 'Jacky merry'
+                }
+            },
+        });
+        // new MyComponent().$mount('#mount-div');
+        // new MyComponent({
+        //     el: '#mount-div'
+        // })
+        /** 
+         * 手动挂载实例（组件）是一种比较极端的高级用法，
+         * 业务中几乎用不到，只在开发一些复杂的独立组件时可能会使用
+         */
+    </script>
+</body>
+</html>
