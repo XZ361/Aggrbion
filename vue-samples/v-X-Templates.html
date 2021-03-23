@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Templates</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- Vue 提供了另一种定义模板的方式，在script 标签里适用text/x-template,并指定一个id,
+    讲这个ID赋值给template -->
+    <div id="app">
+        <my-component></my-component>
+        <script type="text/x-template" id="my-component">
+            <div>
+            <div>这是组件的内容</div>
+            <p>李二狗要升级</p>
+            </div>
+        </script>
+    </div>
+    <script>
+        Vue.component('my-component',{
+            template:'#my-component'
+        });
+        let vm = new Vue({
+            el: '#app',
+
+        })
+    </script>
+</body>
+</html>
