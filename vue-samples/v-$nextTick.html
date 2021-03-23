@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$nextTick</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div id="div" v-if="showDiv">你好，文本</div>
+        <div @click="getText">获取div内容</div>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    showDiv: false
+                }
+            },
+            methods: {
+                getText(e) {
+                    this.showDiv = true;
+                    // setTimeout(()=>{
+                    //     let oDiv = document.getElementById('div');
+                    //     console.log(oDiv.innerHTML)
+                    //     console.log(oDiv.innerText)
+                    // },0)
+                    //在下一个事件循环中，dom更新完成，此时可以找到更新的div元素
+                    this.$nextTick(function(){
+                        var text = document.getElementById('div').innerHTML;
+                        console.log(text);    
+                    })
+                    
+                }
+            },
+        })
+        /** 
+         * 运行后，控制台抛出Cannot read property 'innerHTML' of null,表示获取不到div元素。
+         * 这里涉及到Vue的一个重要概念：异步更新队列
+         * Vue在观察到数据变化时，不回去直接更新DOM，而是开启一个队列，并缓冲在同一事件循环中发生的所有数据
+         * 改变。在缓冲时去掉重复数据，从而避免不必要的计算和dom操作。
+         * 然后，在下一个时间循环tick中，vue刷星队列并实际执行（已去重的工作）。
+         * 
+         * -------------------------------------------------------------------------------
+         * Vue 会根据当前浏览器环境优先使用原生的Promise.then 和MutationObserver,如果都不支持，
+         * 就会采用setTimeout代替。
+         * 事实上，在执行this.showDiv = true时，div仍然还是没有被创建出来，指导下一个vue时间循环时，才开始创建。
+         * $nextTick就是用来知道什么时候dom更新完成的，所以上面的示例代码需要修改为：
+         * 
+         */
+    </script>
+</body>
+</html>
